@@ -1,18 +1,18 @@
 <?php
 namespace Payum\Offline\Tests;
 
-use Payum\Offline\PaymentFactory;
+use Payum\Offline\OfflineGatewayFactory;
 
-class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OfflineGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementPaymentFactoryInterface()
+    public function shouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Offline\PaymentFactory');
+        $rc = new \ReflectionClass('Payum\Offline\OfflineGatewayFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
     }
 
     /**
@@ -20,55 +20,55 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new PaymentFactory();
+        new OfflineGatewayFactory();
     }
 
     /**
      * @test
      */
-    public function shouldCreateCorePaymentFactoryIfNotPassed()
+    public function shouldCreateCoreGatewayFactoryIfNotPassed()
     {
-        $factory = new PaymentFactory();
+        $factory = new OfflineGatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\PaymentFactory', 'corePaymentFactory', $factory);
+        $this->assertAttributeInstanceOf('Payum\Core\GatewayFactory', 'coreGatewayFactory', $factory);
     }
 
     /**
      * @test
      */
-    public function shouldUseCorePaymentFactoryPassedAsSecondArgument()
+    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
     {
-        $corePaymentFactory = $this->getMock('Payum\Core\PaymentFactoryInterface');
+        $coreGatewayFactory = $this->getMock('Payum\Core\GatewayFactoryInterface');
 
-        $factory = new PaymentFactory(array(), $corePaymentFactory);
+        $factory = new OfflineGatewayFactory(array(), $coreGatewayFactory);
 
-        $this->assertAttributeSame($corePaymentFactory, 'corePaymentFactory', $factory);
+        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePayment()
+    public function shouldAllowCreateGateway()
     {
-        $factory = new PaymentFactory();
+        $factory = new OfflineGatewayFactory();
 
-        $payment = $factory->create();
+        $gateway = $factory->create();
 
-        $this->assertInstanceOf('Payum\Core\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
 
-        $this->assertAttributeEmpty('apis', $payment);
-        $this->assertAttributeNotEmpty('actions', $payment);
+        $this->assertAttributeEmpty('apis', $gateway);
+        $this->assertAttributeNotEmpty('actions', $gateway);
 
-        $extensions = $this->readAttribute($payment, 'extensions');
+        $extensions = $this->readAttribute($gateway, 'extensions');
         $this->assertAttributeNotEmpty('extensions', $extensions);
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentConfig()
+    public function shouldAllowCreateGatewayConfig()
     {
-        $factory = new PaymentFactory();
+        $factory = new OfflineGatewayFactory();
 
         $config = $factory->createConfig();
 
@@ -79,9 +79,9 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingPaymentConfig()
+    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new PaymentFactory(array(
+        $factory = new OfflineGatewayFactory(array(
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ));
@@ -102,7 +102,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldConfigContainDefaultOptions()
     {
-        $factory = new PaymentFactory();
+        $factory = new OfflineGatewayFactory();
 
         $config = $factory->createConfig();
 
@@ -117,7 +117,7 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldConfigContainFactoryNameAndTitle()
     {
-        $factory = new PaymentFactory();
+        $factory = new OfflineGatewayFactory();
 
         $config = $factory->createConfig();
 
